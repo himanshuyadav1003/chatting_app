@@ -1,0 +1,67 @@
+{
+  "project_info": {
+    "project_number": "573921554526",
+    "project_id": "my-firebase-project-76611",
+    "storage_bucket": "my-firebase-project-76611.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:573921554526:android:615e027cc0739319c304cf",
+        "android_client_info": {
+          "package_name": "com.connect.chattingapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCp-HXlG8c_Yyow-MlfzNH2LQMmGjCd0hs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:573921554526:android:fd8200bf7da698c5c304cf",
+        "android_client_info": {
+          "package_name": "com.example.flutter_application_4"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCp-HXlG8c_Yyow-MlfzNH2LQMmGjCd0hs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:573921554526:android:d06f1a9f6277147bc304cf",
+        "android_client_info": {
+          "package_name": "com.example.testing_firebase"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCp-HXlG8c_Yyow-MlfzNH2LQMmGjCd0hs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
