@@ -1,34 +1,24 @@
+import 'package:chatting_app/Signup.dart';
 import 'package:chatting_app/home.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-class SignUpScreen extends StatelessWidget {
-  SignUpScreen({super.key});
+class LoginScreen extends StatelessWidget {
+  LoginScreen({Key? key});
 
-  TextEditingController username = TextEditingController();
   TextEditingController email = TextEditingController();
   TextEditingController password = TextEditingController();
-  TextEditingController confirmpassword = TextEditingController();
-  TextEditingController phonenumber = TextEditingController();
 
-    final FirebaseAuth _auth = FirebaseAuth.instance;
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  Future<void> _signUp(BuildContext context) async {
+  Future<void> _signIn(BuildContext context) async {
     try {
-      UserCredential userCredential = await _auth.createUserWithEmailAndPassword(
+      UserCredential userCredential = await _auth.signInWithEmailAndPassword(
         email: email.text,
         password: password.text,
       );
 
-      // Store additional user information in Firestore
-      await _firestore.collection('users').doc(userCredential.user!.uid).set({
-        'username': username.text,
-        'phoneNumber': phonenumber.text,
-      });
-
-      // Registration successful, you can now navigate to the home screen
+      // Login successful, navigate to the home screen
       Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(
@@ -37,10 +27,8 @@ class SignUpScreen extends StatelessWidget {
         (route) => false,
       );
     } on FirebaseAuthException catch (e) {
-      if (e.code == 'weak-password') {
-        print('The password provided is too weak.');
-      } else if (e.code == 'email-already-in-use') {
-        print('The account already exists for that email.');
+      if (e.code == 'user-not-found' || e.code == 'wrong-password') {
+        print('Invalid email or password.');
       }
       // Handle other exceptions as needed
     } catch (e) {
@@ -56,6 +44,7 @@ class SignUpScreen extends StatelessWidget {
         width: MediaQuery.of(context).size.width,
         child: SingleChildScrollView(
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               SizedBox(
                 height: MediaQuery.of(context).size.height * 0.1,
@@ -68,7 +57,7 @@ class SignUpScreen extends StatelessWidget {
                   ],
                 ).createShader(rect),
                 child: Text(
-                  "Sign Up",
+                  "Login",
                   style: TextStyle(
                     fontSize: 30,
                     fontWeight: FontWeight.bold,
@@ -77,29 +66,6 @@ class SignUpScreen extends StatelessWidget {
               ),
               SizedBox(
                 height: MediaQuery.of(context).size.height * 0.1,
-              ),
-              Container(
-                height: 60,
-                padding: EdgeInsets.all(5),
-                width: MediaQuery.of(context).size.width * 0.8,
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    color: Colors.black,
-                    width: 2,
-                  ),
-                  borderRadius: BorderRadius.circular(30),
-                ),
-                child: TextField(
-                  controller: username,
-                  decoration: InputDecoration(
-                    border: InputBorder.none,
-                    hintText: "Username",
-                    prefixIcon: Icon(Icons.person_2_outlined),
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: MediaQuery.of(context).size.height * 0.02,
               ),
               Container(
                 height: 60,
@@ -147,60 +113,12 @@ class SignUpScreen extends StatelessWidget {
                 ),
               ),
               SizedBox(
-                height: MediaQuery.of(context).size.height * 0.02,
-              ),
-              Container(
-                height: 60,
-                padding: EdgeInsets.all(5),
-                width: MediaQuery.of(context).size.width * 0.8,
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    color: Colors.black,
-                    width: 2,
-                  ),
-                  borderRadius: BorderRadius.circular(30),
-                ),
-                child: TextField(
-                  controller: confirmpassword,
-                  obscureText: true,
-                  decoration: InputDecoration(
-                    border: InputBorder.none,
-                    hintText: "Confirm Password",
-                    prefixIcon: Icon(Icons.lock_outline),
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: MediaQuery.of(context).size.height * 0.02,
-              ),
-              Container(
-                height: 60,
-                padding: EdgeInsets.all(5),
-                width: MediaQuery.of(context).size.width * 0.8,
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    color: Colors.black,
-                    width: 2,
-                  ),
-                  borderRadius: BorderRadius.circular(30),
-                ),
-                child: TextField(
-                  controller: phonenumber,
-                  keyboardType: TextInputType.phone,
-                  decoration: InputDecoration(
-                    border: InputBorder.none,
-                    hintText: "Phone Number",
-                    prefixIcon: Icon(Icons.phone),
-                  ),
-                ),
-              ),
-              SizedBox(
                 height: MediaQuery.of(context).size.height * 0.1,
               ),
               GestureDetector(
-                onTap: () async{
-                  _signUp(context);
-                 
+                onTap: () async {
+                  // Perform login
+                  await _signIn(context);
                 },
                 child: Container(
                   height: 60,
@@ -216,7 +134,7 @@ class SignUpScreen extends StatelessWidget {
                   ),
                   child: Center(
                     child: Text(
-                      "Sign Up",
+                      "Login",
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 20,
@@ -226,6 +144,38 @@ class SignUpScreen extends StatelessWidget {
                   ),
                 ),
               ),
+               SizedBox(
+                height: MediaQuery.of(context).size.height * 0.01,
+              ),
+              GestureDetector(
+                onTap: () {
+                  // Navigate to the signup screen when the text is tapped
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => SignUpScreen()),
+                  );
+                },
+                child: Text.rich(
+                  TextSpan(
+                    text: "Don't have an account? ",
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.black,
+                    ),
+                    children: <TextSpan>[
+                      TextSpan(
+                        text: "Sign up",
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.blue,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      )
+                    ]
+                  )
+                )
+              )
+
             ],
           ),
         ),
@@ -233,3 +183,4 @@ class SignUpScreen extends StatelessWidget {
     );
   }
 }
+
