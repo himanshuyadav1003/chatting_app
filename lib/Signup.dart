@@ -21,11 +21,16 @@ class SignUpScreen extends StatelessWidget {
         email: email.text,
         password: password.text,
       );
-
+      String uid = userCredential.user!.uid;
+       // Get the current server timestamp
+    FieldValue serverTimestamp = FieldValue.serverTimestamp();
       // Store additional user information in Firestore
       await _firestore.collection('users').doc(userCredential.user!.uid).set({
         'username': username.text,
         'phoneNumber': phonenumber.text,
+         'email': email.text,
+         'id': uid,
+         'created at':serverTimestamp
       });
 
       // Registration successful, you can now navigate to the home screen

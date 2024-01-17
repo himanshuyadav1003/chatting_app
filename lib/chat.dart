@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
 class ChatScreen extends StatelessWidget {
-  const ChatScreen({super.key});
+  final String username;
+  const ChatScreen({super.key, required this.username});
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +23,7 @@ class ChatScreen extends StatelessWidget {
             SizedBox(
               width: 10,
             ),
-            Text("User 1"),
+            Text(username),
           ],
         ),
         actions: [
@@ -36,6 +37,43 @@ class ChatScreen extends StatelessWidget {
           ),
          
         ],
+      ),
+      body: Container(
+        height: MediaQuery.of(context).size.height,
+        width: MediaQuery.of(context).size.width,
+        child: Column(
+          children: [
+            SizedBox(
+              height: 20,
+            ),
+            Container(
+              height: 60,
+              padding: EdgeInsets.all(8),
+              width: MediaQuery.of(context).size.width*0.95,
+              decoration: BoxDecoration(
+                // border: Border.all(color: Colors.black),
+                borderRadius: BorderRadius.circular(30),
+                color: Colors.white,
+                boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.3), // Shadow color
+                  spreadRadius: 2, // Spread radius
+                  blurRadius: 7, // Blur radius
+                  offset: Offset(1, 1), // Offset in the x, y direction
+                ),
+              ],
+              ),
+              child: Row(
+                children: [
+                  Icon(Icons.emoji_emotions_outlined),
+                  Expanded(child: TextField()),
+                  Icon(Icons.camera_alt_outlined),
+                  Icon(Icons.file_present_outlined),
+                ],
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
