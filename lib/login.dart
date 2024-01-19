@@ -3,13 +3,42 @@ import 'package:chatting_app/home.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
   LoginScreen({Key? key});
 
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
   TextEditingController email = TextEditingController();
+
   TextEditingController password = TextEditingController();
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
+
+
+
+checkUserIsLoggedIn() async {
+    String userId = await _auth.currentUser!.uid;
+    if (userId != null) {
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(
+          builder: (context) => HomeScreen(),
+        ),
+        (route) => false,
+      );
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    checkUserIsLoggedIn();
+  }
+
+
 
   Future<void> _signIn(BuildContext context) async {
     try {

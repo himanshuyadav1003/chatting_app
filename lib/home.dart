@@ -3,9 +3,47 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-class HomeScreen extends StatelessWidget {
-   final FirebaseAuth _auth = FirebaseAuth.instance;
+class HomeScreen extends StatefulWidget {
+
    HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+   final FirebaseAuth _auth = FirebaseAuth.instance;
+   Map<String, dynamic> userMap = {};
+
+   String chatRoomId(String user1, String user2) {
+    if (user1[0].toLowerCase().codeUnits[0] >
+        user2.toLowerCase().codeUnits[0]) {
+      return "$user1$user2";
+    } else {
+      return "$user2$user1";
+    }
+  }
+
+    getCurrentUserData() async {
+    // Get the current user ID
+    final currentUserID = FirebaseAuth.instance.currentUser!.uid;
+
+    // Get the current user's data
+    final DocumentSnapshot snapshot = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(currentUserID)
+        .get();
+
+    userMap = snapshot.data() as Map<String, dynamic>;
+    print(snapshot.data());
+  }
+
+
+@override
+  void initState() {
+    getCurrentUserData();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -50,8 +88,20 @@ class HomeScreen extends StatelessWidget {
             // Example: Text(username)
             return ListTile(
               onTap: () {
+
+                      String roomId = chatRoomId(
+                        FirebaseAuth.instance.currentUser!.uid,
+                        id,
+                      );
+
+
                 Navigator.push(context, MaterialPageRoute(builder: (context) {
-                  return ChatScreen(username: username,);
+                   return Chatroom(
+                    userData: userMap,
+                      targetName: username,
+                      targetId: id,
+                    chatroomId: roomId,
+                   );
                 },));
               },
               leading: Container(
@@ -95,7 +145,6 @@ class HomeScreen extends StatelessWidget {
     ));
   
   }
-
 
   Widget buildDrawer(BuildContext context) {
     return Drawer(
